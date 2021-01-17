@@ -45,7 +45,7 @@
             echo $error;
         }
         // signup form method
-        public function signup($name,$email,$username,$password,$c_password){
+        public function signup($name,$email,$username,$password,$c_password,$number){
             $error = '';
            
             // check if email already exists
@@ -61,9 +61,9 @@
                     $error = '<div class="alert alert-danger" role="alert">Passwords do not match! </div>';
                 }
                 else{
-                    $query = "INSERT INTO users(`fullname`,username,email,`password`) VALUES(?,?,?,?)";
+                    $query = "INSERT INTO users(`fullname`,username,email,`password`,phone_num) VALUES(?,?,?,?,?)";
                     $stmt = $this->conn->prepare($query);
-                    $stmt->bind_param('ssss',$name,$username,$email,$password);
+                    $stmt->bind_param('ssssi',$name,$username,$email,$password,$number);
                     if ($stmt->execute()){
                         // // select id of the inserted  user
                         $user_id = mysqli_insert_id($this->conn);

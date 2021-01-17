@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expenditure | Login</title>
+    <title>Expenditure | Sign Up</title>
     <link rel="stylesheet" href="vendors/css/style.css">
     <link rel="stylesheet" href="vendors/css/bootstrap.min.css">
     <link rel="stylesheet" href="vendors/css/all.css">
@@ -22,8 +22,9 @@
                         $username = strip_tags($_POST['username']);
                         $password = md5($_POST['password']);
                         $c_password = md5($_POST['c_password']);
+                        $number = strip_tags($_POST['number']);
                         $model = new Model;
-                        $model->signup($name,$email,$username,$password,$c_password);
+                        $model->signup($name,$email,$username,$password,$c_password,$number);
                     }
 
                 ?>
@@ -34,6 +35,8 @@
                         <input type="email" name="email" class="form-control" id=""><br>
                         <label for="username">Username</label>
                         <input type="text" name="username" class="form-control" id=""><br>
+                        <label for="username">Phone number</label>
+                        <input type="number" name="number" class="form-control" id=""><br>
                         <label for="password">Password</label>
                         <input type="password" name="password" class="form-control"><br>
                         <label for="password">Confirm password</label>
