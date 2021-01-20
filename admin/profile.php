@@ -121,9 +121,7 @@
                         <div class="col-md-6">
                             <div class="card shadow">
                               <?php 
-                            //   error_reporting(E_ALL);
-                                 // include the model class
-                                 include '../model/modal.php';
+                           
                                 // if the form is submitted
                                 if (isset($_POST['submit'])) {
                                     // session id

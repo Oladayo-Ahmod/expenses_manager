@@ -150,7 +150,20 @@
             echo $error;
         }
 
-        // profile image functionality
+        // fetch profile image
+        public function profile_img($id){
+            $data = null;
+            $query = "SELECT image_dir FROM users WHERE id =?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                $data = $fetch = $result->fetch_assoc(); 
+            }
+            return $data;
+        }
+
+        // profile image update functionality
         public function update_img($id,$image){
             // setting error message
             $error = '';
@@ -164,21 +177,19 @@
                 else {
                     $image_exp = explode('.',$_FILES['image']['name']);
                     $image_path = "../images/". round(microtime(true)) . '.' .strtolower(end($image_exp));
+                    // image path for the db to match the other images path in the signup
+                    $db_path = "images/". round(microtime(true)) . '.' .strtolower(end($image_exp));
                     if (move_uploaded_file($_FILES['image']['tmp_name'],$image_path)){// if the image is moved to the folder
                         // update the image path in the database
                         $update = "UPDATE users SET image_dir = ? WHERE id = ? LIMIT 1";
                         $stmt = $this->conn->prepare($update);
-                        $stmt->bind_param('si',$image_path,$id);
+                        $stmt->bind_param('si',$db_path,$id);
                         if ($stmt->execute()) {
                             $error = '<div class="alert alert-success" role="alert">Image uploaded successfully! </div>';
                         }
                         else {
                             $error = '<div class="alert alert-danger" role="alert">Error updating image! </div>';
                         }   
-                    }
-                    else{
-                        $error = '<div class="alert alert-danger" role="alert">Error! Not image </div>'. mysqli_error($this->conn);
-
                     } 
                    
                 }

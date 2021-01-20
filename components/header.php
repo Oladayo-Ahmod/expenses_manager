@@ -1,3 +1,4 @@
+
 <div class="page-wrapper">
         <!-- HEADER DESKTOP-->
         <header class="header-desktop3 d-none d-lg-block">
@@ -107,7 +108,17 @@
                         <div class="account-wrap">
                             <div class="account-item account-item--style2 clearfix js-item-menu">
                                 <div class="image">
-                                    <img src="../images/avatar-01.jpg" alt="admin image" />
+                                    <?php
+                                        // include the modal file
+                                        include '../model/modal.php';
+                                        // session id
+                                        $id = $_SESSION['id'];
+                                        // instantiate the model class
+                                        $model = new Model;
+                                        $image = $model->profile_img($id);
+                                        
+                                    ?>
+                                    <img src="../<?=$image['image_dir']?>" alt="admin image" />
                                 </div>
                                 <div class="content">
                                     <a class="js-acc-btn" href="#">Oladayo Ahmod</a>
@@ -116,7 +127,7 @@
                                     <div class="info clearfix">
                                         <div class="image">
                                             <a href="#">
-                                                <img src="../images/avatar-01.jpg" alt="oladayo ahmod" />
+                                                <img src="../<?=$image['image_dir']?>" alt="oladayo ahmod" />
                                             </a>
                                         </div>
                                         <div class="content">

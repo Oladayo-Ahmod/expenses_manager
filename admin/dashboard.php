@@ -15,7 +15,7 @@
     <meta name="keywords" content="expenses,income,expenses management,income management">
 
     <!-- Title Page-->
-    <title>Expenses | Income | Dashboard</title>
+    <title>Expenditure | Dashboard</title>
 
     <!-- Fontfaces CSS-->
     <link href="../vendors/css/font-face.css" rel="stylesheet" media="all">
