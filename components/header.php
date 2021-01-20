@@ -5,7 +5,7 @@
                 <div class="header3-wrap">
                     <div class="header__logo">
                         <a href="#">
-                            <!-- <img src="images/icon/logo-white.png" alt="CoolAdmin" /> --> <h1 class="text-secondary">SPREE</h1>
+                            <!-- <img src="images/icon/logo-white.png" alt="CoolAdmin" /> --> <h1 class="text-secondary"><?= ucwords('unitech');?></h1>
                         </a>
                     </div>
                     <div class="header__navbar">
@@ -128,17 +128,14 @@
                                     </div>
                                     <div class="account-dropdown__body">
                                         <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-account"></i>Account</a>
+                                            <a href="profile.php">
+                                                <i class="zmdi zmdi-account"></i>Profile</a>
                                         </div>
                                         <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-settings"></i>Setting</a>
+                                            <a href="image.php">
+                                                <i class="zmdi zmdi-settings"></i>Change Image</a>
                                         </div>
-                                        <div class="account-dropdown__item">
-                                            <a href="#">
-                                                <i class="zmdi zmdi-money-box"></i>Billing</a>
-                                        </div>
+                                        
                                     </div>
                                     <div class="account-dropdown__footer">
                                         <a href="logout.php">
@@ -349,17 +346,14 @@
                             </div>
                             <div class="account-dropdown__body">
                                 <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-account"></i>Account</a>
+                                    <a href="profile.php">
+                                        <i class="zmdi zmdi-account"></i>Profile</a>
                                 </div>
                                 <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-settings"></i>Setting</a>
+                                    <a href="image.php">
+                                    <i class="zmdi zmdi-settings"></i>Change Image</a>
                                 </div>
-                                <div class="account-dropdown__item">
-                                    <a href="#">
-                                        <i class="zmdi zmdi-money-box"></i>Billing</a>
-                                </div>
+                                
                             </div>
                             <div class="account-dropdown__footer">
                                 <a href="logout.php">

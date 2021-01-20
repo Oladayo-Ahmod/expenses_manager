@@ -10,7 +10,7 @@
             try {
                 $this-> conn = new mysqli($this->localhost,$this->username,$this->password,$this->db_name);
             } catch (Exception $e) {
-                echo "error making connection".$e;
+                echo "error making connection".$e->getMessage();
             }
         }
 
@@ -47,7 +47,8 @@
         // signup form method
         public function signup($name,$email,$username,$password,$c_password,$number){
             $error = '';
-           
+            error_reporting(E_ALL);
+
             // check if email already exists
             $check_mail = "SELECT id FROM users WHERE email = ?";
             $stmt = $this->conn->prepare($check_mail);
@@ -90,5 +91,59 @@
             }
             echo $error;
         }
+
+        // fetching user data
+        public function user_data($id){
+            error_reporting(E_ALL);
+
+            // setting the error message to empty
+            $error = '';
+            // setting the data to null
+            $data = null;
+            $query = "SELECT * FROM users WHERE id =? LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$id);
+            if ($stmt->execute()){
+               while($result = $stmt->get_result()){
+                $data[] = $result->fetch_assoc();
+               }  
+            }
+            else{
+                $error = '<div class="alert alert-danger" role="alert">Error fetching user data! </div>'.mysqli_error($this->conn);
+            }
+            return $data;
+            echo $error;
+        }
+
+        // update the user data
+        public function update_data($id,$name,$email,$username,$password,$c_password,$number){
+            // set the error message
+            $error = '';
+            if (isset($_POST['submit'])) {
+               
+                // check if the password match
+                if ($password !== $c_password) {
+                    $error = '<div class="alert alert-danger" role="alert">Passwords do not match! </div>';
+                }
+                else{
+                    // set the strong password
+                    $strong_pass = md5(md5($password).$id);
+                    // update the password
+                    $update = "UPDATE users SET fullname = ?,username = ?,email = ?,phone_num = ?,`password` = ? WHERE id = ? LIMIT 1 ";
+                    $stmt =  $this->conn->prepare($update);
+                    $stmt->bind_param('sssisi',$name,$username,$email,$number,$password,$id);
+                    if ($stmt->execute()){
+                        $error = '<div class="alert alert-success" role="alert">Profile updated successfully! </div>';
+                        // header('location:profile.php');
+                    }
+                    else {
+                        $error = '<div class="alert alert-danger" role="alert">Error updating profile! </div>';
+                    }
+                }
+            }
+            echo $error;
+        }
+
+
     }
 ?>
