@@ -5,9 +5,3 @@ a{
     font-weight:lighter;
     border-radius: 5px;
 }
-@media screen (max-width:800px){
-#large_screen{
-    display:none !important;
-    opacity:0;
-}
-}
