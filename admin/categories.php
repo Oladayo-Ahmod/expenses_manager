@@ -15,7 +15,7 @@
     <meta name="keywords" content="expenses,income,expenses management,income management">
 
     <!-- Title Page-->
-    <title>Expenditure | Dashboard</title>
+    <title> Manage | Categories </title>
 
     <!-- Fontfaces CSS-->
     <link href="../vendors/css/font-face.css" rel="stylesheet" media="all">
@@ -37,14 +37,13 @@
 
     <!-- Main CSS-->
     <link href="../vendors/css/theme.css" rel="stylesheet" media="all">
-    <link href="../vendors/css/style.css" rel="stylesheet" media="all">
+    <link href="../vendors/css/style.css" rel="stylesheet">
 
 </head>
 
 <body class="animsition">
             <!-- header -->
             <?php include '../components/header.php'; ?>
-           
             <div class="container">
                 <!-- error message  -->
                     <?php
@@ -115,58 +114,74 @@
             </section>
             <!-- END STATISTIC-->
 
-            <!-- STATISTIC CHART-->
-            <section class="statistic-chart">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3 class="title-5 m-b-35">statistics</h3>
-                        </div>
+                <!-- category section -->
+            <section>
+            <div class="container "> 
+            <ol class="breadcrumb">
+                <li class="active text-danger"><i class="fa fa-minus mr-1"></i>/ Categories Management</li>
+            </ol>
+
+        <div class="card shadow">
+            <div>
+                <h6 class="list-group-item active"><i class="fa fa-minus mr-1"></i>/ Manage Categories</h6>
+            </div>
+            <div class="card-body">
+
+                <!--  search bar -->
+                    <div class="col-md-4 ml-auto">
+                        <form action="#" method="POST" class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" type="search" placeholder="search...">
+                                <span class="input-group-append">
+                                    <button name="searchExp" class="btn btn-primary" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6">
-                            <!-- CHART-->
-                            <div class="statistic-chart-1">
-                                <h3 class="title-3 m-b-30">chart</h3>
-                                <div class="chart-wrap">
-                                    <canvas id="widgetChart5"></canvas>
-                                </div>
-                                <div class="statistic-chart-1-note">
-                                    <span class="big">10,368</span>
-                                    <span>/ 16220 items sold</span>
-                                </div>
-                            </div>
-                            <!-- END CHART-->
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-4">
-                            <!-- CHART PERCENT-->
-                            <div class="chart-percent-2">
-                                <h3 class="title-3 m-b-30">chart by %</h3>
-                                <div class="chart-wrap">
-                                    <canvas id="percent-chart2"></canvas>
-                                    <div id="chartjs-tooltip">
-                                        <table></table>
-                                    </div>
-                                </div>
-                                <div class="chart-info">
-                                    <div class="chart-note">
-                                        <span class="dot dot--blue"></span>
-                                        <span>products</span>
-                                    </div>
-                                    <div class="chart-note">
-                                        <span class="dot dot--red"></span>
-                                        <span>Services</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END CHART PERCENT-->
-                        </div>
+
+                                                
+                                       <!-- <div class="">         -->
+                    <div class="table-responsive justify-content-center align-items-center">
+                        <table class="table  table-responsive table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Category Name</th>
+                                    <th>Category type</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                    
+                                    $model = new Model;
+                                    $row = $model->manage_categories();
+                                                                 
+                                    if (!empty($row)) {
+                                        $count = 1;
+                                        foreach($row as $rows){
+                                           
+                                            ?>
+                                            <tr>
+                                                <td><?= $count++; ?></td>
+                                                <td><?= $rows['category_name']; ?></td>
+                                                <td><?= $rows['cat_type']; ?></td>
+                                                <td style="display:flex;">
+                                                    <a href="editcat.php?cat=<?=$rows['id'];?>"><i class="fas fa-edit mr-2 text-primary"></i></a>
+                                                    <a href="delete.php?cat=<?=$rows['id']?>"><i class="fas fa-trash text-danger"></i></a>
+                                                </td>
+                                            </tr>
+                                                <?php }} ?>
+                                   
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            
             </section>
-            <!-- END STATISTIC CHART-->
-
+           
             
             <?php include '../components/page_modal.php'; ?>
 
@@ -184,7 +199,8 @@
             </section>
             <!-- END COPYRIGHT-->
         </div>
-    
+
+    </div>
 
     <!-- Jquery JS-->
     <script src="../vendors/js/jquery.min.js"></script>

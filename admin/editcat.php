@@ -15,7 +15,7 @@
     <meta name="keywords" content="expenses,income,expenses management,income management">
 
     <!-- Title Page-->
-    <title>Expenditure | Dashboard</title>
+    <title> Manage | Categories </title>
 
     <!-- Fontfaces CSS-->
     <link href="../vendors/css/font-face.css" rel="stylesheet" media="all">
@@ -37,14 +37,13 @@
 
     <!-- Main CSS-->
     <link href="../vendors/css/theme.css" rel="stylesheet" media="all">
-    <link href="../vendors/css/style.css" rel="stylesheet" media="all">
+    <link href="../vendors/css/style.css" rel="stylesheet">
 
 </head>
 
 <body class="animsition">
             <!-- header -->
             <?php include '../components/header.php'; ?>
-           
             <div class="container">
                 <!-- error message  -->
                     <?php
@@ -115,58 +114,47 @@
             </section>
             <!-- END STATISTIC-->
 
-            <!-- STATISTIC CHART-->
-            <section class="statistic-chart">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3 class="title-5 m-b-35">statistics</h3>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 col-lg-6">
-                            <!-- CHART-->
-                            <div class="statistic-chart-1">
-                                <h3 class="title-3 m-b-30">chart</h3>
-                                <div class="chart-wrap">
-                                    <canvas id="widgetChart5"></canvas>
-                                </div>
-                                <div class="statistic-chart-1-note">
-                                    <span class="big">10,368</span>
-                                    <span>/ 16220 items sold</span>
-                                </div>
-                            </div>
-                            <!-- END CHART-->
-                        </div>
-                        
-                        <div class="col-md-6 col-lg-4">
-                            <!-- CHART PERCENT-->
-                            <div class="chart-percent-2">
-                                <h3 class="title-3 m-b-30">chart by %</h3>
-                                <div class="chart-wrap">
-                                    <canvas id="percent-chart2"></canvas>
-                                    <div id="chartjs-tooltip">
-                                        <table></table>
-                                    </div>
-                                </div>
-                                <div class="chart-info">
-                                    <div class="chart-note">
-                                        <span class="dot dot--blue"></span>
-                                        <span>products</span>
-                                    </div>
-                                    <div class="chart-note">
-                                        <span class="dot dot--red"></span>
-                                        <span>Services</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END CHART PERCENT-->
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- END STATISTIC CHART-->
+                <!-- category section -->
+            <section>
+            <div class="container">
+            <ol class="breadcrumb">
+                <li class="active text-danger"><i class="fa fa-minus mr-1"></i>/ Category</li>
+            </ol>
 
+        <div class="card shadow p-3">
+            <div>
+                <h6 class="list-group-item active mb-2"><i class="fa fa-minus mr-1"></i>/ Edit Category</h6>
+            </div>
+            <?php
+                if (isset($_POST['catUpdate'])) {
+                    $id = $_GET['cat'];
+                    $name = $_POST['name'];
+                    $model = new Model;
+                    $model->cat_update($id,$name);
+                }
+                // check if the customer is set
+                if (isset($_GET['cat'])) {
+                    //setting the id
+                    $id = $_GET['cat'];
+                    $modal = new Model;
+                    $edit = $modal->edit($id);
+                }
+                
+                    foreach ($edit as $editing) {?>
+            <!-- form -->
+            <form class="form-group p-2" enctype="multipart/form-data" method="POST" action="">
+                <label for="name">Category Name</label>
+                <input type="text" name="name" value="<?=$editing['category_name']; ?>" required class="form-control"><br>
+                <label for="name">Category Type</label>
+                <input type="text" name="type" value="<?=$editing['cat_type']; ?>" readonly class="form-control"><br>
+                <button type="submit" name="catUpdate" class="btn btn-primary">Update</button>
+            </form>
+                    <?php } ?>
+        </div>
+
+        </div>
+            </section>
+           
             
             <?php include '../components/page_modal.php'; ?>
 
@@ -184,7 +172,8 @@
             </section>
             <!-- END COPYRIGHT-->
         </div>
-    
+
+    </div>
 
     <!-- Jquery JS-->
     <script src="../vendors/js/jquery.min.js"></script>

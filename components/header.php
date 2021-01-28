@@ -34,13 +34,13 @@
                             <li class="has-sub">
                                 <a href="#">
                                     <i class="fas fa-copy"></i>
-                                    <span class="bot-line"></span>Admin</a>
+                                    <span class="bot-line"></span>Expenses</a>
                                 <ul class="header3-sub-list list-unstyled">
                                     <li>
-                                        <a href="#" type="button" data-toggle="modal" data-target="#adduser">Add Admin</a>
+                                        <a href="#" type="button" data-toggle="modal" data-target="#addexpense">Add Expenses</a>
                                     </li>
                                     <li>
-                                        <a href="users.php">Manage Admins</a>
+                                        <a href="users.php">Manage Expenses</a>
                                     </li>
                                    
                                 </ul>
@@ -115,26 +115,26 @@
                                         $id = $_SESSION['id'];
                                         // instantiate the model class
                                         $model = new Model;
-                                        $image = $model->profile_img($id);
+                                        $images = $model->profile_det($id);
                                         
-                                    ?>
+                                   foreach($images as $image){?>
                                     <img src="../<?=$image['image_dir']?>" alt="admin image" />
                                 </div>
                                 <div class="content">
-                                    <a class="js-acc-btn" href="#">Oladayo Ahmod</a>
+                                    <a class="js-acc-btn" href="#"><?= $image['fullname']; ?></a>
                                 </div>
                                 <div class="account-dropdown js-dropdown">
                                     <div class="info clearfix">
                                         <div class="image">
                                             <a href="#">
-                                                <img src="../<?=$image['image_dir']?>" alt="oladayo ahmod" />
+                                                <img src="../<?=$image['image_dir']?>" alt="admin image" />
                                             </a>
                                         </div>
                                         <div class="content">
                                             <h5 class="name">
-                                                <a href="#">Oladayo Ahmod</a>
+                                                <a href="#"><?= $image['fullname']; ?></a>
                                             </h5>
-                                            <span class="email">oladayoahmod112@gmail.com</span>
+                                            <span class="email"><?= $image['email']; ?></span>
                                         </div>
                                     </div>
                                     <div class="account-dropdown__body">
@@ -167,7 +167,7 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
                         <a class="logo" href="index.html">
-                            <img src="../images/logo-white.png" alt="CoolAdmin" />
+                        <h1 class="text-secondary"><?= ucwords('unitech');?></h1>
                         </a>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
@@ -188,13 +188,13 @@
 
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i>Admins</a>
+                                <i class="fas fa-copy"></i>Expenses</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="#" type="button" data-toggle="modal" data-target="#adduser">Add Admin</a>
+                                    <a href="#" type="button" data-toggle="modal" data-target="#addexpense">Add Expense</a>
                                 </li>
                                 <li>
-                                    <a href="users.php">Manage Admins</a>
+                                    <a href="users.php">Manage Expenses</a>
                                 </li>
                             </ul>
                         </li>
@@ -258,7 +258,7 @@
         </header>
         <div class="sub-header-mobile-2 d-block d-lg-none">
             <div class="header__tool">
-                <div class="header-button-item has-noti js-item-menu">
+                <!-- <div class="header-button-item has-noti js-item-menu">
                     <i class="zmdi zmdi-notifications"></i>
                     <div class="notifi-dropdown notifi-dropdown--no-bor js-dropdown">
                         <div class="notifi__title">
@@ -332,28 +332,29 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="account-wrap">
+                </div> -->
+                <div class="account-wrap mr-5">
                     <div class="account-item account-item--style2 clearfix js-item-menu">
                         <div class="image">
-                            <img src="../images//avatar-01.jpg" alt="oladayo ahmod" />
+                            <img src="../<?= $image['image_dir']; ?>" alt="admin image" />
                         </div>
                         <div class="content">
-                            <a class="js-acc-btn" href="#">oladayo ahmod</a>
+                            <a class="js-acc-btn" href="#"><?= $image['fullname']; ?></a>
                         </div>
                         <div class="account-dropdown js-dropdown">
                             <div class="info clearfix">
                                 <div class="image">
                                     <a href="#">
-                                        <img src="../images//avatar-01.jpg" alt="oladayo ahmod" />
+                                        <img src="../images//avatar-01.jpg" alt="admin image" />
                                     </a>
                                 </div>
                                 <div class="content">
                                     <h5 class="name">
-                                        <a href="#">oladayo ahmod</a>
+                                        <a href="#"><?= $image['fullname']; ?></a>
                                     </h5>
-                                    <span class="email">oladayoahmod112@gmail.com</span>
+                                    <span class="email"><?= $image['email']; ?></span>
                                 </div>
+                                <?php } ?>
                             </div>
                             <div class="account-dropdown__body">
                                 <div class="account-dropdown__item">
@@ -409,3 +410,9 @@
                 </div>
             </section>
             <!-- END BREADCRUMB-->
+
+            <!-- add admin bootstrap modal -->
+            <div class="container-fluid">
+            <?php include 'admin_modal.php'; ?>
+            </div>
+            

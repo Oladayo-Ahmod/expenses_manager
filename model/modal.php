@@ -200,5 +200,102 @@
             echo $error;
             }
 
+            // category method
+        public function add_cat($cat_name,$cat_type){
+            $error = '';
+            $cat_name = ucwords($cat_name);
+            // check if the category already exists
+            $check = "SELECT id FROM categories WHERE category_name = ? AND cat_type = ? ";
+            $stmt = $this->conn->prepare($check);
+            $stmt->bind_param('ss',$cat_name,$cat_type);
+            if ($stmt->execute()){
+                $result = $stmt->get_result(); 
+                // check if the category is found
+                if (mysqli_num_rows($result) > 0) {
+                    $error = '<div class="alert alert-danger" role="alert"> category already exists! </div>';    
+                }
+                else{
+                    $query = "INSERT INTO categories (category_name,cat_type) VALUES(?,?)";
+                    $stmt = $this->conn->prepare($query);
+                    $stmt->bind_param('ss',$cat_name,$cat_type);
+                    if ($stmt->execute()){
+                        $error = '<div class="alert alert-success" role="alert">category added successfully! </div>';
+                    }
+                    else{
+                        $error = '<div class="alert alert-danger" role="alert">error adding category ! </div>';
+                    }
+                }
+            }
+            echo $error;
+        }
+
+            // manage categories method
+        public function manage_categories(){
+            $data = null;
+            $query = "SELECT * FROM categories";
+            $stmt = $this->conn->prepare($query);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data[] = $fetch;
+                }
+            }
+            return $data;
+        }
+
+            // creating category update
+        public function cat_update($id,$name){
+            $error = null;
+            $query = "UPDATE categories SET category_name = ? WHERE id = ? LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si',$name,$id);
+            if($stmt->execute()){
+                $error = '<div class="alert alert-success">category updated successfully!</div>';
+            }
+            else {
+                $error = '<div class="alert alert-danger">Error updating category try later!</div>';
+            }
+            echo $error;
+        }
+
+        //creating edit method
+		public function edit($id){
+			// disabling error report
+			// error_reporting(0);
+            $data = null;
+            //check if the get variable is category
+			if (isset($_GET['cat'])) {
+				$query = "SELECT * FROM categories WHERE id= ? LIMIT 1";
+				$stmt = $this->conn->prepare($query);
+				$stmt->bind_param('i',$id);
+				if($stmt->execute()){
+					$result = $stmt->get_result();
+					while ($fetch = $result->fetch_assoc()) {
+						$data[] = $fetch;
+					}
+				}
+            }
+            return $data;
+        }
+
+        // deleting method
+        public function delete($id){
+			$error = '';
+        	    //check if category id is set
+            if (isset($_GET['cat'])) {
+				$query = "DELETE FROM categories WHERE id = ? LIMIT 1";
+				$stmt = $this->conn->prepare($query);
+				$stmt->bind_param('i',$id);
+				if($stmt->execute()){
+					header('location:categories.php');
+				}
+				else {
+					$error = '<div class="alert alert-danger">Error deleting category!</div>';
+				}
+            }
+            return $error;
+        }
+		
+        
     }
 ?>
