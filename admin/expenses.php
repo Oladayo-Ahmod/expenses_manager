@@ -15,7 +15,7 @@
     <meta name="keywords" content="expenses,income,expenses management,income management">
 
     <!-- Title Page-->
-    <title> Manage | Categories </title>
+    <title> Manage | Expenses </title>
 
     <!-- Fontfaces CSS-->
     <link href="../vendors/css/font-face.css" rel="stylesheet" media="all">
@@ -116,46 +116,90 @@
 
                 <!-- category section -->
             <section>
-            <div class="container">
+            <div class="container "> 
             <ol class="breadcrumb">
-                <li class="active text-danger"><i class="fa fa-minus mr-1"></i>/ Category</li>
+                <li class="active text-danger"><i class="fa fa-minus mr-1"></i>/ Expenses Management</li>
             </ol>
 
-        <div class="card shadow p-3">
+        <div class="card shadow">
             <div>
-                <h6 class="list-group-item active mb-2"><i class="fa fa-minus mr-1"></i>/ Edit Category</h6>
+                <h6 class="list-group-item active"><i class="fa fa-minus mr-1"></i>/ Manage Expenses</h6>
             </div>
-            <?php
-                if (isset($_POST['catUpdate'])) {
-                    $id = $_GET['cat']; // expense id
-                    $user_id = $_SESSION['id']; // user id
-                    $name = $_POST['name'];
-                    $model = new Model;
-                    $model->cat_update($id,$name,$user_id);
-                }
-                // check if the category is set
-                if (isset($_GET['cat'])) {
-                    //setting the id
-                    $id = $_GET['cat'];
-                    // user id
-                    $user_id = $_SESSION['id'];
-                    $modal = new Model;
-                    $edit = $modal->edit_cat($id,$user_id);
-                }
-                
-                    foreach ($edit as $editing) {?>
-            <!-- form -->
-            <form class="form-group p-2" enctype="multipart/form-data" method="POST" action="">
-                <label for="name">Category Name</label>
-                <input type="text" name="name" value="<?=$editing['category_name']; ?>" required class="form-control"><br>
-                <label for="name">Category Type</label>
-                <input type="text" name="type" value="<?=$editing['cat_type']; ?>" readonly class="form-control"><br>
-                <button type="submit" name="catUpdate" class="btn btn-primary">Update</button>
-            </form>
-                    <?php } ?>
-        </div>
+            <div class="card-body">
 
-        </div>
+                <!--  search bar -->
+                    <div class="col-md-4 ml-auto">
+                        <form action="#" method="POST" class="form-group">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="search" type="search" placeholder="search...">
+                                <span class="input-group-append">
+                                    <button name="searchExp" class="btn btn-primary" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+
+                                                
+                                       <!-- <div class="">         -->
+                    <div class="table-responsive justify-content-center align-items-center">
+                    <table class="table  table-responsive table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>S/N</th>
+                                    <th>Item</th>
+                                    <th>Cost</th>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Place</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                                // if (isset($_POST['searchExp'])) {
+                                //     $modal = new Model;
+                                //     // $search = strip_tags($_POST['search']);
+                                //     $row = $modal->manageExp($start,$rpp,$page,$previous,$next); 
+                                //     // $total_pages = $row['total'];
+                                // }
+                                // else{
+                                //     $modal = new Model;
+                                //     $row =  $modal->manageExp($start,$rpp,$page,$previous,$next);
+                                //     // $total_pages = $row['total'];
+                                // }
+                                $modal = new Model;
+                                // user id
+                                $user_id = $_SESSION['id'];
+                                $row =  $modal->manageExp($user_id);
+                                  
+                                    if (!empty($row)) {
+                                        $count = 1;
+                                        foreach($row as $rows){
+                                           
+                                            ?>
+                                            <tr>
+                                                <td><?= $count++; ?></td>
+                                                <td><?= $rows['exp_name']; ?></td>
+                                                <td><?= $rows['exp_amount']; ?></td>
+                                                <td><?= $rows['exp_date']; ?></td>
+                                                <td><?= $rows['exp_desc']; ?></td>
+                                                <td><?= $rows['exp_cat']; ?></td>
+                                                <td><?= $rows['place']; ?></td>
+                                                <td style="display:flex;">
+                                                    <a href="edit.php?exp=<?=$rows['id'];?>"><i class="fas fa-edit mr-2 text-primary"></i></a>
+                                                    <a href="delete.php?exp=<?=$rows['id'];?>"><i class="fas fa-trash text-danger"></i></a>
+                                                </td>
+                                            </tr>
+                                                <?php }} ?>
+                                   
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            
             </section>
            
             

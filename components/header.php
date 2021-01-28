@@ -40,7 +40,7 @@
                                         <a href="#" type="button" data-toggle="modal" data-target="#addexpense">Add Expenses</a>
                                     </li>
                                     <li>
-                                        <a href="users.php">Manage Expenses</a>
+                                        <a href="expenses.php">Manage Expenses</a>
                                     </li>
                                    
                                 </ul>
@@ -194,7 +194,7 @@
                                     <a href="#" type="button" data-toggle="modal" data-target="#addexpense">Add Expense</a>
                                 </li>
                                 <li>
-                                    <a href="users.php">Manage Expenses</a>
+                                    <a href="expenses.php">Manage Expenses</a>
                                 </li>
                             </ul>
                         </li>

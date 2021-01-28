@@ -15,7 +15,7 @@
     <meta name="keywords" content="expenses,income,expenses management,income management">
 
     <!-- Title Page-->
-    <title> Manage | Categories </title>
+    <title> Manage | Expenses </title>
 
     <!-- Fontfaces CSS-->
     <link href="../vendors/css/font-face.css" rel="stylesheet" media="all">
@@ -118,39 +118,70 @@
             <section>
             <div class="container">
             <ol class="breadcrumb">
-                <li class="active text-danger"><i class="fa fa-minus mr-1"></i>/ Category</li>
+                <li class="active text-danger"><i class="fa fa-minus mr-1"></i>/ Expenses</li>
             </ol>
 
         <div class="card shadow p-3">
             <div>
-                <h6 class="list-group-item active mb-2"><i class="fa fa-minus mr-1"></i>/ Edit Category</h6>
+                <h6 class="list-group-item active mb-2"><i class="fa fa-minus mr-1"></i>/ Edit Expenses</h6>
             </div>
             <?php
-                if (isset($_POST['catUpdate'])) {
-                    $id = $_GET['cat']; // expense id
+                 // check if the expenditure update is set
+                if (isset($_POST['expUpdate'])) {
+                    $id = $_GET['exp']; //getting the id of the expense
                     $user_id = $_SESSION['id']; // user id
-                    $name = $_POST['name'];
+                    $name = strip_tags($_POST['name']);
+                    $amount = strip_tags($_POST['amount']);
+                    $date = $_POST['date'];
+                    $description = strip_tags($_POST['description']);
+                    $category = strip_tags($_POST['category']);
+                    $place = strip_tags($_POST['place']);
                     $model = new Model;
-                    $model->cat_update($id,$name,$user_id);
+                    $model->update($id,$user_id,$name,$amount,$date,$description,$category,$place);
                 }
-                // check if the category is set
-                if (isset($_GET['cat'])) {
+                // check if the expenses id is set
+                if (isset($_GET['exp'])) {
                     //setting the id
-                    $id = $_GET['cat'];
+                    $id = $_GET['exp'];
                     // user id
                     $user_id = $_SESSION['id'];
                     $modal = new Model;
-                    $edit = $modal->edit_cat($id,$user_id);
+                    $rows = $modal->edit($id,$user_id);
                 }
                 
-                    foreach ($edit as $editing) {?>
+                    foreach ($rows as $row) {?>
             <!-- form -->
             <form class="form-group p-2" enctype="multipart/form-data" method="POST" action="">
-                <label for="name">Category Name</label>
-                <input type="text" name="name" value="<?=$editing['category_name']; ?>" required class="form-control"><br>
-                <label for="name">Category Type</label>
-                <input type="text" name="type" value="<?=$editing['cat_type']; ?>" readonly class="form-control"><br>
-                <button type="submit" name="catUpdate" class="btn btn-primary">Update</button>
+                <label for="item">Item</label>
+                <input type="text" value="<?= $row['exp_name']; ?>" class="form-control" name="name" required>
+                <label for="item-cost">Item Cost</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">#</div>
+                    </div>
+                    <input type="number" value="<?= $row['exp_amount']; ?>" class="form-control" name="amount" required>
+                </div>
+                <label for="item">Item Date</label>
+                <input type="date" class="form-control" name="date" value="<?= $row['exp_date']; ?>" required><br>
+                <label for="post-category">Item category</label>
+                <select class="form-control" name="category" id="" required><br>
+                    <option value="" disabled selected><?= $row['exp_cat']; ?></option>
+                    <?php 
+                        $modal = new Model;
+                        //category type
+                        $type = 'expenses';
+                        // user id
+                        $user_id = $_SESSION['id'];
+                        $fetch = $modal->fetch_cat($type,$user_id);
+                        foreach($fetch as $fetches){?>
+                    <option value=<?= $fetches['category_name'];?> ><?= $fetches['category_name'];?></option>
+                    <?php }?>	
+                </select><br>				
+                <label for="item">Item Place</label>
+                <input type="text" class="form-control" value="<?= $row['place']; ?>" name="place" required><br>
+                <label for="item">Item Description</label>
+                <textarea name="description" class="form-control" id="" cols="15"><?= $row['exp_desc']; ?></textarea><br>
+                <button type="submit" name="expUpdate" class="btn btn-primary">Update</button>
             </form>
                     <?php } ?>
         </div>

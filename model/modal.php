@@ -201,13 +201,13 @@
             }
 
             // category method
-        public function add_cat($cat_name,$cat_type){
+        public function add_cat($cat_name,$cat_type,$user_id){
             $error = '';
             $cat_name = ucwords($cat_name);
             // check if the category already exists
-            $check = "SELECT id FROM categories WHERE category_name = ? AND cat_type = ? ";
+            $check = "SELECT id FROM categories WHERE category_name = ? AND (user_id = ? && cat_type = ?) ";
             $stmt = $this->conn->prepare($check);
-            $stmt->bind_param('ss',$cat_name,$cat_type);
+            $stmt->bind_param('sis',$cat_name,$user_id,$cat_type);
             if ($stmt->execute()){
                 $result = $stmt->get_result(); 
                 // check if the category is found
@@ -215,9 +215,9 @@
                     $error = '<div class="alert alert-danger" role="alert"> category already exists! </div>';    
                 }
                 else{
-                    $query = "INSERT INTO categories (category_name,cat_type) VALUES(?,?)";
+                    $query = "INSERT INTO categories (category_name,cat_type,user_id) VALUES(?,?,?)";
                     $stmt = $this->conn->prepare($query);
-                    $stmt->bind_param('ss',$cat_name,$cat_type);
+                    $stmt->bind_param('ssi',$cat_name,$cat_type,$user_id);
                     if ($stmt->execute()){
                         $error = '<div class="alert alert-success" role="alert">category added successfully! </div>';
                     }
@@ -230,10 +230,11 @@
         }
 
             // manage categories method
-        public function manage_categories(){
+        public function manage_categories($user_id){
             $data = null;
-            $query = "SELECT * FROM categories";
+            $query = "SELECT * FROM categories WHERE user_id = ?";
             $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
             if ($stmt->execute()){
                 $result = $stmt->get_result();
                 while ($fetch = $result->fetch_assoc()) {
@@ -244,11 +245,11 @@
         }
 
             // creating category update
-        public function cat_update($id,$name){
+        public function cat_update($id,$name,$user_id){
             $error = null;
-            $query = "UPDATE categories SET category_name = ? WHERE id = ? LIMIT 1";
+            $query = "UPDATE categories SET category_name = ? WHERE id = ? AND user_id = ? LIMIT 1";
             $stmt = $this->conn->prepare($query);
-            $stmt->bind_param('si',$name,$id);
+            $stmt->bind_param('sii',$name,$id,$user_id);
             if($stmt->execute()){
                 $error = '<div class="alert alert-success">category updated successfully!</div>';
             }
@@ -258,10 +259,51 @@
             echo $error;
         }
 
-        //creating edit method
-		public function edit($id){
-			// disabling error report
-			// error_reporting(0);
+        // fetch category
+        public function fetch_cat($type,$user_id){
+            $data = null;
+            $query = "SELECT * FROM categories WHERE cat_type = ? AND user_id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('si',$type,$user_id);
+            if ($stmt->execute()) {
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()){
+                    $data[] = $fetch;
+                }
+            }
+            return $data;
+        }
+
+        // add expenses method
+        public function add_exp($user_id,$name,$amount,$date,$description,$category,$place){
+            $error = '';
+            $query = "INSERT INTO expenses(user_id,exp_name,exp_date,exp_amount,exp_desc,exp_cat,place) VALUES(?,?,?,?,?,?,?)";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ississs',$user_id,$name,$date,$amount,$description,$category,$place);
+            if($stmt->execute()){
+                $error = '<div class="alert alert-success">Expense added successfully!</div>';
+            }
+            else {
+                $error = '<div class="alert alert-danger">Error adding expense!</div>';
+            }
+            echo $error;
+        }
+        
+        // manage expenditure method
+        public function manageExp($user_id){
+            $data = null;
+            $query = "SELECT * FROM expenses WHERE user_id = ?";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($fetch = $result->fetch_assoc()){
+                $data[] = $fetch;
+            }
+            return $data;
+        }
+        //creating category edit method
+		public function edit_cat($id){
             $data = null;
             //check if the get variable is category
 			if (isset($_GET['cat'])) {
@@ -278,19 +320,62 @@
             return $data;
         }
 
+        // creating edit expenses method
+        public function edit($id,$user_id){
+            $data = null;
+            //check if the get variable is expenses
+			if (isset($_GET['exp'])) {
+				$query = "SELECT * FROM expenses WHERE id= ? AND user_id = ? LIMIT 1";
+				$stmt = $this->conn->prepare($query);
+				$stmt->bind_param('ii',$id,$user_id);
+				if($stmt->execute()){
+					$result = $stmt->get_result();
+					while ($fetch = $result->fetch_assoc()) {
+						$data[] = $fetch;
+					}
+				}
+            }
+            return $data;
+        }
+        // update method
+        public function update($id,$user_id,$name,$amount,$date,$description,$category,$place){
+            $error = '';
+            $query = "UPDATE expenses SET exp_name = ?,exp_date = ?,exp_amount = ?,exp_desc = ?,exp_cat = ?, place = ? WHERE id = ? AND user_id = ? LIMIT 1";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('ssisssii',$name,$date,$amount,$description,$place,$category,$id,$user_id);
+            if($stmt->execute()){
+                $error = '<div class="alert alert-success">expenses updated successfully!</div>';
+            }
+            else {
+                $error = '<div class="alert alert-danger">Error updating expenses try later!</div>';
+            }
+            echo $error;
+			 
+        }
         // deleting method
-        public function delete($id){
+        public function delete($id,$user_id){
 			$error = '';
         	    //check if category id is set
             if (isset($_GET['cat'])) {
-				$query = "DELETE FROM categories WHERE id = ? LIMIT 1";
+				$query = "DELETE FROM categories WHERE id = ? AND user_id = ? LIMIT 1";
 				$stmt = $this->conn->prepare($query);
-				$stmt->bind_param('i',$id);
+				$stmt->bind_param('ii',$id,$user_id);
 				if($stmt->execute()){
 					header('location:categories.php');
 				}
 				else {
 					$error = '<div class="alert alert-danger">Error deleting category!</div>';
+				}
+            }
+            else if (isset($_GET['exp'])) {
+				$query = "DELETE FROM expenses WHERE id = ? AND user_id = ? LIMIT 1";
+				$stmt = $this->conn->prepare($query);
+				$stmt->bind_param('ii',$id,$user_id);
+				if($stmt->execute()){
+					header('location:expenses.php');
+				}
+				else {
+					$error = '<div class="alert alert-danger">Error deleting expenses!</div>';
 				}
             }
             return $error;

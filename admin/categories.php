@@ -157,7 +157,9 @@
                                 <?php 
                                     
                                     $model = new Model;
-                                    $row = $model->manage_categories();
+                                    // user id
+                                    $user_id = $_SESSION['id'];
+                                    $row = $model->manage_categories($user_id);
                                                                  
                                     if (!empty($row)) {
                                         $count = 1;
