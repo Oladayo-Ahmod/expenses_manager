@@ -150,15 +150,17 @@
             echo $error;
         }
 
-        // fetch profile image
-        public function profile_img($id){
+        // fetch profile details
+        public function profile_det($id){
             $data = null;
-            $query = "SELECT image_dir FROM users WHERE id =?";
+            $query = "SELECT * FROM users WHERE id =?";
             $stmt = $this->conn->prepare($query);
             $stmt->bind_param('i',$id);
             if ($stmt->execute()){
                 $result = $stmt->get_result();
-                $data = $fetch = $result->fetch_assoc(); 
+                while ($fetch = $result->fetch_assoc()){
+                    $data[] = $fetch;
+                } 
             }
             return $data;
         }
