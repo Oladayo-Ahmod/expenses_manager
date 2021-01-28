@@ -132,7 +132,7 @@
                     $model = new Model;
                     $model->cat_update($id,$name);
                 }
-                // check if the customer is set
+                // check if the category is set
                 if (isset($_GET['cat'])) {
                     //setting the id
                     $id = $_GET['cat'];
