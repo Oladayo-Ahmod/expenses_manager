@@ -380,7 +380,51 @@
             }
             return $error;
         }
-		
+
+        // weekly report analysis
+        public function weekly($user_id){
+            $data = null;
+            $query = "SELECT * FROM expenses WHERE user_id =? AND WEEK(exp_date) = WEEK(CURRENT_DATE())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data[] = $fetch;
+                }
+            }
+            return $data;
+        }
+
+        // monthly report analysis
+        public function monthly($user_id){
+            $data = null;
+            $query = "SELECT * FROM expenses WHERE user_id =? AND MONTH(exp_date) = MONTH(CURRENT_DATE())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data[] = $fetch;
+                }
+            }
+            return $data;
+        }
+        
+        // yearly report analysis
+        public function yearly($user_id){
+            $data = null;
+            $query = "SELECT * FROM expenses WHERE user_id =? AND YEAR(exp_date) = YEAR(CURRENT_DATE())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data[] = $fetch;
+                }
+            }
+            return $data;
+        }
         
     }
 ?>

@@ -64,44 +64,18 @@
                             <li class="has-sub">
                                 <a href="#">
                                     <i class="fas fa-copy"></i>
-                                    <span class="bot-line"></span>Products</a>
+                                    <span class="bot-line"></span>Reports</a>
                                 <ul class="header3-sub-list list-unstyled">
                                     <li>
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addproduct">Add product</a>
+                                        <a href="weekly.php">Weekly</a>
                                     </li>
                                     <li>
-                                        <a href="products.php">Manage Products</a>
+                                        <a href="monthly.php">Monthly</a>
+                                    </li>
+                                    <li>
+                                        <a href="yearly.php">Yearly</a>
                                     </li>
                                     
-                                </ul>
-                            </li>
-                            <li class="has-sub">
-                                <a href="#">
-                                    <i class="fas fa-copy"></i>
-                                    <span class="bot-line"></span>Customers</a>
-                                <ul class="header3-sub-list list-unstyled">
-                                    <li>
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addcustomer">Add Customer</a>
-                                    </li>
-                                    <li>
-                                        <a href="customers.php">Manage Customers</a>
-                                    </li>
-                                    
-                                </ul>
-                            </li>
-
-                            <li class="has-sub">
-                                <a href="#">
-                                    <i class="fas fa-copy"></i>
-                                    <span class="bot-line"></span>Vendor</a>
-                                <ul class="header3-sub-list list-unstyled">
-                                    <li>
-                                        <a href="#" type="button" data-toggle="modal" data-target="#addvendor">Add Vendor</a>
-                                    </li>
-                                    <li>
-                                        <a href="vendors.php">Manage Vendors</a>
-                                    </li>
-                                   
                                 </ul>
                             </li>
                             
@@ -214,43 +188,19 @@
 
                         <li class="has-sub">
                             <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i>Products</a>
+                                <i class="fas fa-copy"></i>Reports</a>
                             <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
                                 <li>
-                                    <a href="#" type="button" data-toggle="modal" data-target="#addproduct">Add Product</a>
+                                    <a href="weekly.php">Weekly</a>
                                 </li>
                                 <li>
-                                    <a href="products.php">Manage Products</a>
+                                    <a href="monthly.php">Monthly</a>
+                                </li>
+                                <li>
+                                    <a href="yearly.php">Yearly</a>
                                 </li>
                             </ul>
                         </li>
-                        
-                        <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i>Customers</a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="#" type="button" data-toggle="modal" data-target="#addcustomer">Add Admin</a>
-                                </li>
-                                <li>
-                                    <a href="customers.php">Manage Customers</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-copy"></i>Vendors</a>
-                            <ul class="navbar-mobile-sub__list list-unstyled js-sub-list">
-                                <li>
-                                    <a href="#" type="button" data-toggle="modal" data-target="#addvendor">Add Vendor</a>
-                                </li>
-                                <li>
-                                    <a href="vendors.php">Manage Vendors</a>
-                                </li>
-                            </ul>
-                        </li>
-                        
                         
                     </ul>
                 </div>
