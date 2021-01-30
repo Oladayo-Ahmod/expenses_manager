@@ -1,3 +1,7 @@
+<?php 
+     // include the modal file
+     include '../model/modal.php';
+?>
 
 <div class="page-wrapper">
         <!-- HEADER DESKTOP-->
@@ -83,8 +87,7 @@
                             <div class="account-item account-item--style2 clearfix js-item-menu">
                                 <div class="image">
                                     <?php
-                                        // include the modal file
-                                        include '../model/modal.php';
+                                       
                                         // session id
                                         $id = $_SESSION['id'];
                                         // instantiate the model class
