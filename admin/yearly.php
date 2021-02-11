@@ -112,9 +112,20 @@
                     </div>
                 </div>
             </section>
-            <!-- END STATISTIC-->
-
+            <!-- END STATISTIC
+                <div class="container">
+                <label for="expense">select expense</label><br>
+                <input list="expenses" name="expense" id="expense">
+                <datalist id="expenses">
+                    <option value="weekly">
+                    <option value="daily">
+                    <option value="monthly">
+                    <option value="yearly">
+                    <option value="quarterly">
+                </datalist>
+                </div><br><br> -->
                 <!-- report section -->
+               
             <section>
             <div class="container "> 
             <ol class="breadcrumb">

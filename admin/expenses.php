@@ -1,4 +1,6 @@
-<?php session_start(); 
+<?php 
+    error_reporting(0);
+    session_start(); 
     if (strlen($_SESSION['id']) < 1) {
         header('location:../index.php');
     }
@@ -141,7 +143,56 @@
                         </form>
                     </div>
 
-                                                
+                    <!--pagination for the table-->
+                        <nav arial-black="Page navigation example text-center">
+                            <ul class="pagination justify-content-center">
+                                <?php
+                                
+                                // setting result per page
+                                $rpp = 2;
+                                //check if the page is set
+                                if (isset($_GET['page'])) {
+                                    $page = $_GET['page'];
+                                }
+                                else{
+                                    $page = 1;
+                                }
+                                // check if the page value is greater than 1
+                                if ($page > 1) {
+                                    $start = ($page * $rpp) - $rpp;
+                                }
+                                else {
+                                    $start = 0;
+                                }
+                                //previous button for the pagination
+                                $previous = $page - 1;
+                                //next button for the pagination
+                                $next = $page + 1;
+                                if (isset($_POST['searchExp'])) {
+                                    $modal = new Model;
+                                    // user id
+                                    $user_id = $_SESSION['id'];
+                                    // $search = strip_tags($_POST['search']);
+                                    $row = $modal->manageExp($user_id,$start,$rpp,$page,$previous,$next); 
+                                    $total_pages = $row['total'];
+                                }
+                                else{
+                                    $modal = new Model;
+                                    // user id
+                                    $user_id = $_SESSION['id'];
+                                    $row =  $modal->manageExp($user_id,$start,$rpp,$page,$previous,$next);
+                                    $total_pages = $row['total'];
+                                }
+                                ?>
+                                <li class="page-item"><a href="expenses.php?page=<?= $previous;?>" class="page-link">previous</a></li>
+                                <?php 
+                                for ($i=1; $i<= $total_pages; $i++):?>
+                                    <li class="page-item"><a href="expenses.php?page=<?= $i;?>" class="page-link"><?= $i; ?></a></li>
+                                <?php endfor; ?>
+                                
+                                <li class="page-item"><a href="expenses.php?page=<?= $next;?>" class="page-link">Next</a></li>
+                            </ul>
+                        </nav>                                                
                                        <!-- <div class="">         -->
                     <div class="table-responsive justify-content-center align-items-center">
                     <table class="table  table-responsive table-bordered table-hover">
@@ -157,29 +208,29 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            
                                 <?php 
-                                // if (isset($_POST['searchExp'])) {
-                                //     $modal = new Model;
-                                //     // $search = strip_tags($_POST['search']);
-                                //     $row = $modal->manageExp($start,$rpp,$page,$previous,$next); 
-                                //     // $total_pages = $row['total'];
-                                // }
-                                // else{
-                                //     $modal = new Model;
-                                //     $row =  $modal->manageExp($start,$rpp,$page,$previous,$next);
-                                //     // $total_pages = $row['total'];
-                                // }
-                                $modal = new Model;
-                                // user id
-                                $user_id = $_SESSION['id'];
-                                $row =  $modal->manageExp($user_id);
-                                  
+                                if (isset($_POST['searchExp'])) {
+                                    $modal = new Model;
+                                    // user id
+                                    $user_id = $_SESSION['id'];
+                                    // $search = strip_tags($_POST['search']);
+                                    $row = $modal->manageExp($user_id,$start,$rpp,$page,$previous,$next); 
+                                    // $total_pages = $row['total'];
+                                }
+                                else{
+                                    $modal = new Model;
+                                    // user id
+                                    $user_id = $_SESSION['id'];
+                                    $row =  $modal->manageExp($user_id,$start,$rpp,$page,$previous,$next);
+                                   
+                                }
+                                ?>
+                                <?php
                                     if (!empty($row)) {
                                         $count = 1;
-                                        foreach($row as $rows){
-                                           
-                                            ?>
+                                        foreach($row as $rows){?>
+                                        <tbody>
                                             <tr>
                                                 <td><?= $count++; ?></td>
                                                 <td><?= $rows['exp_name']; ?></td>
@@ -188,14 +239,16 @@
                                                 <td><?= $rows['exp_desc']; ?></td>
                                                 <td><?= $rows['exp_cat']; ?></td>
                                                 <td><?= $rows['place']; ?></td>
+                                                <td><?= $rows['place']; ?></td>
                                                 <td style="display:flex;">
                                                     <a href="edit.php?exp=<?=$rows['id'];?>"><i class="fas fa-edit mr-2 text-primary"></i></a>
                                                     <a href="delete.php?exp=<?=$rows['id'];?>"><i class="fas fa-trash text-danger"></i></a>
                                                 </td>
                                             </tr>
+                                        </tbody>
                                                 <?php }} ?>
                                    
-                            </tbody>
+                            
                         </table>
                     </div>
                 </div>

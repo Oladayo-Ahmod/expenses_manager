@@ -157,22 +157,22 @@
                             </thead>
                             <tbody>
                                 <?php 
-                                // if (isset($_POST['searchExp'])) {
-                                //     $modal = new Model;
-                                //     // $search = strip_tags($_POST['search']);
-                                //     $row = $modal->manageExp($start,$rpp,$page,$previous,$next); 
-                                //     // $total_pages = $row['total'];
-                                // }
-                                // else{
-                                //     $modal = new Model;
-                                //     $row =  $modal->manageExp($start,$rpp,$page,$previous,$next);
-                                //     // $total_pages = $row['total'];
-                                // }
-                                $modal = new Model;
-                                // user id
-                                $user_id = $_SESSION['id'];
-                                $row =  $modal->weekly($user_id);
-                                  
+                                if (isset($_POST['searchExp'])) {
+                                    $modal = new Model;
+                                      // user id
+                                    $user_id = $_SESSION['id'];
+                                    // $search = strip_tags($_POST['search']);
+                                    $row = $modal->weekly($user_id); 
+                                    // $total_pages = $row['total'];
+                                }
+                                else{
+                                    $modal = new Model;
+                                      // user id
+                                    $user_id = $_SESSION['id'];
+                                    $row =  $modal->weekly($user_id);
+                                    // $total_pages = $row['total'];
+                                }
+                               
                                     if (!empty($row)) {
                                         $count = 1;
                                         foreach($row as $rows){

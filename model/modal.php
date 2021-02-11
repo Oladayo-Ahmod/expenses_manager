@@ -290,18 +290,62 @@
         }
         
         // manage expenditure method
-        public function manageExp($user_id){
+        public function manageExp($user_id,$start,$rpp,$page,$previous,$next){
             $data = null;
-            $query = "SELECT * FROM expenses WHERE user_id = ?";
-            $stmt = $this->conn->prepare($query);
+            //count the total number of id in the database
+            $count = "SELECT COUNT(id) AS id FROM expenses WHERE user_id = ?";
+            $stmt = $this->conn->prepare($count);
             $stmt->bind_param('i',$user_id);
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($fetch = $result->fetch_assoc()){
-                $data[] = $fetch;
+            $result_count = $result->fetch_assoc();
+            //getting the number of pages
+            $total_pages  = intval($result_count['id']) / $rpp;
+            $data['total'] = $total_pages;
+            $query = "SELECT * FROM expenses WHERE user_id = ? LIMIT $start, $rpp";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()){
+                    $data[] = $fetch;
+                }
             }
+
+            // if search button is set
+			if (isset($_POST['searchExp'])) {
+				$search = strip_tags($_POST['search']);
+				//count the total number of id in the database
+				$count = "SELECT COUNT(id) AS id FROM expenditure";
+				$query_count = $this->conn->query($count);
+				$result_count = mysqli_fetch_array($query_count);
+				//getting the number of pages
+				$total_pages  = intval($result_count['id']) / $rpp;
+				$data['total'] = $total_pages;
+				$query = "SELECT * FROM expenses WHERE
+				 exp_cat REGEXP '^[$search]'
+				 OR exp_name REGEXP '^[$search]'
+				 OR place REGEXP '^[$search]'
+				 ORDER BY exp_name
+				  LIMIT $start,$rpp";
+				$stmt = $this->conn->prepare($query);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				if(mysqli_num_rows($result) > 0){
+					while($fetch = $result->fetch_assoc()){
+						$data[] = $fetch;
+					
+					} 
+					
+				}
+				else {
+					$error = '<div class="alert alert-danger">Error fetching data try later!</div>';
+				}
+						
+			}
             return $data;
         }
+
         //creating category edit method
 		public function edit_cat($id){
             $data = null;
@@ -383,6 +427,7 @@
 
         // weekly report analysis
         public function weekly($user_id){
+            $error = '';
             $data = null;
             $query = "SELECT * FROM expenses WHERE user_id =? AND WEEK(exp_date) = WEEK(CURRENT_DATE())";
             $stmt = $this->conn->prepare($query);
@@ -392,12 +437,45 @@
                 while ($fetch = $result->fetch_assoc()) {
                     $data[] = $fetch;
                 }
-            }
+            } 
+            // if search button is set
+			if (isset($_POST['searchExp'])) {
+				$search = strip_tags($_POST['search']);
+				// //count the total number of id in the database
+				// $count = "SELECT COUNT(id) AS id FROM expenditure";
+				// $query_count = $this->conn->query($count);
+				// $result_count = mysqli_fetch_array($query_count);
+				// //getting the number of pages
+				// $total_pages  = intval($result_count['id']) / $rpp;
+				// $data['total'] = $total_pages;
+				$query = "SELECT * FROM expenses WHERE
+				 exp_cat REGEXP '^[$search]'
+				 OR exp_name REGEXP '^[$search]'
+				 OR place REGEXP '^[$search]'
+                 AND WEEK(exp_date) = WEEK(CURRENT_DATE())
+				 ORDER BY exp_name ";
+				$stmt = $this->conn->prepare($query);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				if(mysqli_num_rows($result) > 0){
+					while($fetch = $result->fetch_assoc()){
+						$data[] = $fetch;
+					
+					} 
+					
+				}
+				else {
+					$error = '<div class="alert alert-danger">Error fetching data try later!</div>';
+				}
+						
+			}
             return $data;
+            echo $error;
         }
 
         // monthly report analysis
         public function monthly($user_id){
+            $error = '';
             $data = null;
             $query = "SELECT * FROM expenses WHERE user_id =? AND MONTH(exp_date) = MONTH(CURRENT_DATE())";
             $stmt = $this->conn->prepare($query);
@@ -408,11 +486,44 @@
                     $data[] = $fetch;
                 }
             }
+              // if search button is set
+			if (isset($_POST['searchExp'])) {
+				$search = strip_tags($_POST['search']);
+				// //count the total number of id in the database
+				// $count = "SELECT COUNT(id) AS id FROM expenditure";
+				// $query_count = $this->conn->query($count);
+				// $result_count = mysqli_fetch_array($query_count);
+				// //getting the number of pages
+				// $total_pages  = intval($result_count['id']) / $rpp;
+				// $data['total'] = $total_pages;
+				$query = "SELECT * FROM expenses WHERE
+				 exp_cat REGEXP '^[$search]'
+				 OR exp_name REGEXP '^[$search]'
+				 OR place REGEXP '^[$search]'
+                 AND MONTH(exp_date) = MONTH(CURRENT_DATE())
+				 ORDER BY exp_name ";
+				$stmt = $this->conn->prepare($query);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				if(mysqli_num_rows($result) > 0){
+					while($fetch = $result->fetch_assoc()){
+						$data[] = $fetch;
+					
+					} 
+					
+				}
+				else {
+					$error = '<div class="alert alert-danger">Error fetching data try later!</div>';
+				}
+						
+			}
             return $data;
+            echo $error;
         }
         
         // yearly report analysis
         public function yearly($user_id){
+            $error = '';
             $data = null;
             $query = "SELECT * FROM expenses WHERE user_id =? AND YEAR(exp_date) = YEAR(CURRENT_DATE())";
             $stmt = $this->conn->prepare($query);
@@ -423,8 +534,41 @@
                     $data[] = $fetch;
                 }
             }
+              // if search button is set
+			if (isset($_POST['searchExp'])) {
+				$search = strip_tags($_POST['search']);
+				// //count the total number of id in the database
+				// $count = "SELECT COUNT(id) AS id FROM expenditure";
+				// $query_count = $this->conn->query($count);
+				// $result_count = mysqli_fetch_array($query_count);
+				// //getting the number of pages
+				// $total_pages  = intval($result_count['id']) / $rpp;
+				// $data['total'] = $total_pages;
+				$query = "SELECT * FROM expenses WHERE
+				 exp_cat REGEXP '^[$search]'
+				 OR exp_name REGEXP '^[$search]'
+				 OR place REGEXP '^[$search]'
+                 AND YEAR(exp_date) = YEAR(CURRENT_DATE())
+				 ORDER BY exp_name ";
+				$stmt = $this->conn->prepare($query);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				if(mysqli_num_rows($result) > 0){
+					while($fetch = $result->fetch_assoc()){
+						$data[] = $fetch;
+					
+					} 
+					
+				}
+				else {
+					$error = '<div class="alert alert-danger">Error fetching data try later!</div>';
+				}
+						
+			}
             return $data;
+            echo $error;
         }
+   
         
     }
 ?>

@@ -137,10 +137,10 @@
                                 // session id
                                 $id = $_SESSION['id'];
                                 // profile image method
-                                $image = $model->profile_img($id);
+                                $data = $model->profile_det($id);
                                 // get the user data
-                               
-                              ?>
+
+                            foreach($data as $image ){?>
                                 <div class="card-body">
                                     <h4 id="form-h4" class="  text-white list-group-item bg-primary"> Users | Profile | Picture</h4>
                                         <div class="my-2">
@@ -154,7 +154,7 @@
                                                 
                                                 <button type="submit" class="btn btn-primary" name="submit">Update</button>
                                             </form>
-                                            
+                            <?php } ?>
                                 </div>
                             </div>
                         </div>
