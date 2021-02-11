@@ -568,7 +568,51 @@
             return $data;
             echo $error;
         }
-   
+
+        // total yearly expenditure
+        public function total_yearly($user_id){
+            $data = null;
+            $query = "SELECT SUM(exp_amount) AS total FROM expenses WHERE user_id = ? AND YEAR(exp_date) = YEAR(CURRENT_DATE())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data = $fetch;
+                }
+            }
+            return $data;
+        }
+
+         // total monthly expenditure
+         public function total_monthly($user_id){
+            $data = null;
+            $query = "SELECT SUM(exp_amount) AS total FROM expenses WHERE user_id = ? AND MONTH(exp_date) = MONTH(CURRENT_DATE())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data = $fetch;
+                }
+            }
+            return $data;
+        }
+        
+         // total weekly expenditure
+         public function total_weekly($user_id){
+            $data = null;
+            $query = "SELECT SUM(exp_amount) AS total FROM expenses WHERE user_id = ? AND WEEK(exp_date) = WEEK(CURRENT_DATE())";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bind_param('i',$user_id);
+            if ($stmt->execute()){
+                $result = $stmt->get_result();
+                while ($fetch = $result->fetch_assoc()) {
+                    $data = $fetch;
+                }
+            }
+            return $data;
+        }
         
     }
 ?>
