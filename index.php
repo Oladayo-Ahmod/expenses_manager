@@ -7,6 +7,16 @@ if ($_SESSION) {
         header('location:admin/dashboard.php');
     }    
 }
+if (isset($_POST['login'])) {
+    $email = strip_tags($_POST['email']);
+    $password = md5($_POST['password']);
+    // include modal file
+    include 'model/modal.php';
+    // instantiate the model class
+    $model = new Model;
+    $model->login($email,$password);
+    $error = $model->login($email,$password);
+} 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,13 +38,9 @@ if ($_SESSION) {
                       <div class="p-2"> 
                             <?php
                                 if (isset($_POST['login'])) {
-                                    $email = strip_tags($_POST['email']);
-                                    $password = md5($_POST['password']);
-                                    // include modal file
-                                    include 'model/modal.php';
-                                    // instantiate the model class
-                                    $model = new Model;
-                                    $model->login($email,$password);
+                                   if (!empty($error)) {
+                                       echo $error['error'];
+                                   }
                                 } 
                                 
                             ?>

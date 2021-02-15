@@ -42,7 +42,8 @@
 						$error = '<div class="alert alert-danger">Incorrect Email or Password </div>';
 					}
 				}
-            echo $error;
+                    $data['error'] = $error;
+                    return $data;
         }
         // signup form method
         public function signup($name,$email,$username,$password,$c_password,$number,$image){
