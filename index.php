@@ -2,7 +2,7 @@
 session_start();
 // check if the user is already logged in
 if ($_SESSION) {
-    if(strlen($_SESSION['id']) == 1){
+    if(strlen($_SESSION['id']) > 0){
         // redirect to the dashboard 
         header('location:admin/dashboard.php');
     }    
