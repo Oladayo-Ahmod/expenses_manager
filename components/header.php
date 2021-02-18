@@ -1,4 +1,5 @@
 <?php 
+    error_reporting(0);
      // include the modal file
      include '../model/modal.php';
 ?>

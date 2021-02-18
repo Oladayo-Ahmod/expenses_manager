@@ -48,7 +48,7 @@
         // signup form method
         public function signup($name,$email,$username,$password,$c_password,$number,$image){
             $error = '';
-            error_reporting(E_ALL);
+            error_reporting(0);
 
             // check if email already exists
             $check_mail = "SELECT id FROM users WHERE email = ?";
@@ -101,7 +101,7 @@
 
         // fetching user data
         public function user_data($id){
-            error_reporting(E_ALL);
+            error_reporting(0);
 
             // setting the error message to empty
             $error = '';
@@ -614,6 +614,41 @@
             }
             return $data;
         }
+
+        // creating dashboard chart for months of the year method
+		public function month_chart($user_id){
+			$data = null;
+			$query = "SELECT date_format(exp_date,'%M') AS month FROM expenses
+			 WHERE YEAR(exp_date) = YEAR(CURRENT_DATE()) AND user_id = ?
+             GROUP BY YEAR(exp_date), MONTH(exp_date)
+			 ORDER BY YEAR(exp_date),MONTH(exp_date)";
+             $stmt = $this->conn->prepare($query);
+             $stmt->bind_param('i',$user_id);
+			 $stmt->execute();
+			 $result = $stmt->get_result();
+			 while($fetch = $result->fetch_assoc()){
+					 $data[] = $fetch; 		 
+			 }
+			 return $data;
+        }
+        
+        // creating dashboard chart for income of the year method
+		public function expenses_chart($user_id){
+			$data = null;
+			$query = "SELECT SUM(exp_amount) AS costs FROM expenses
+			 WHERE YEAR(exp_date) = YEAR(CURRENT_dATE())  AND user_id = ?
+			 GROUP BY YEAR(exp_date), MONTH(exp_date)
+			 ORDER BY YEAR(exp_date),MONTH(exp_date)";
+             $stmt = $this->conn->prepare($query);
+             $stmt->bind_param('i',$user_id);
+			 $stmt->execute();
+			 $result = $stmt->get_result();
+			 while($fetch = $result->fetch_assoc()){
+				 	$data[] = $fetch;		 		 
+			 }
+			//  print_r($data);
+			 return $data;
+		}
         
     }
 ?>

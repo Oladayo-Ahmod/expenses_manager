@@ -1,4 +1,8 @@
-<?php session_start(); 
+<?php 
+ini_set('display_errors','1');
+ini_set('display_startup_errors','1');
+error_reporting(E_ALL);
+session_start(); 
     if (strlen($_SESSION['id']) < 1) {
         header('location:../index.php');
     }
@@ -91,35 +95,14 @@
                                     <canvas id="widgetChart5"></canvas>
                                 </div>
                                 <div class="statistic-chart-1-note">
-                                    <span class="big">10,368</span>
-                                    <span>/ 16220 items sold</span>
+                                    <span class="big">The Year Expenditure Chart</span>
                                 </div>
                             </div>
                             <!-- END CHART-->
                         </div>
-                        
+                      
                         <div class="col-md-6 col-lg-4">
-                            <!-- CHART PERCENT-->
-                            <div class="chart-percent-2">
-                                <h3 class="title-3 m-b-30">chart by %</h3>
-                                <div class="chart-wrap">
-                                    <canvas id="percent-chart2"></canvas>
-                                    <div id="chartjs-tooltip">
-                                        <table></table>
-                                    </div>
-                                </div>
-                                <div class="chart-info">
-                                    <div class="chart-note">
-                                        <span class="dot dot--blue"></span>
-                                        <span>products</span>
-                                    </div>
-                                    <div class="chart-note">
-                                        <span class="dot dot--red"></span>
-                                        <span>Services</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END CHART PERCENT-->
+                            
                         </div>
                     </div>
                 </div>
@@ -167,6 +150,92 @@
     </script>
     <!-- Main JS-->
     <script src="../vendors/js/main.js"></script>
+    <script>
+      
+const bd_brandProduct3 = 'rgba(0,181,233,0.9)';
+const bd_brandService3 = 'rgba(0,173,95,0.9)';
+const brandProduct3 = 'transparent';
+const brandService3 = '#ecd7c0';
+
+var expenditure_chart = [
+                <?php 
+                      // dynamic fetching of the months' data        
+                      $modal = new Model;
+                      $user_id = $_SESSION['id'];
+                      $costs = $modal->expenses_chart($user_id);
+                      foreach($costs as $cost){?>
+                      <?= json_encode($cost['costs']/100) . ','; ?>
+                  <?php } ?>''
+];
+var chart = document.getElementById("widgetChart5");
+var myChart = new Chart(chart, {
+    type: 'bar',
+    data: {
+      labels: [
+                <?php 
+                    $modal = new Model;
+                    $user_id = $_SESSION['id'];
+                    $month = $modal->month_chart($user_id);          
+                    foreach($month as $months){?>
+                    <?= json_encode($months['month']) . ','; ?>
+                <?php } ?>''
+            ],
+      datasets: [
+        {
+          label: 'Expenses',
+          backgroundColor: brandService3,
+          borderColor: bd_brandService3,
+          pointHoverBackgroundColor: '#fff',
+          borderWidth: 0,
+          data: expenditure_chart,
+          pointBackgroundColor: bd_brandService3
+        }
+      ]
+    },
+    options: {
+      maintainAspectRatio: false,
+      legend: {
+        display: true
+      },
+      responsive: true,
+      scales: {
+        xAxes: [{
+          gridLines: {
+            drawOnChartArea: true,
+            color: '#f2f2f2'
+          },
+          ticks: {
+            fontFamily: "Poppins",
+            fontSize: 12
+          }
+        }],
+        yAxes: [{
+          ticks: {
+            beginAtZero: true,
+            maxTicksLimit: 5,
+            stepSize: 50,
+            max: 150,
+            fontFamily: "Poppins",
+            fontSize: 12
+          },
+          gridLines: {
+            display: false,
+            color: '#f2f2f2'
+          }
+        }]
+      },
+      elements: {
+        point: {
+          radius: 3,
+          hoverRadius: 4,
+          hoverBorderWidth: 3,
+          backgroundColor: '#333'
+        }
+      }
+
+    }
+  });
+    </script>
 
 </body>
 
